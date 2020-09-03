@@ -1,0 +1,35 @@
+server:
+  port: 7904
+
+spring:
+  application:
+    name: train-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/train_12306?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+
+#eureka:
+#  instance:
+#    hostname: localhost
+#    preferIpAddress: true
+#  client:
+#   serviceUrl:
+#      defaultZone: http://admin:admin@${eureka.instance.hostname}:8761/eureka/
+
+#开启负载均衡
+#ribbon:
+#  eureka:
+#    enabled: true
+
+#zuul:
+#  ignoredServices: '*'
+#  routes:
+#    appA:
+#      path: /u/**
+#      serviceId: provider-user
+
+logging:
+  level:
+    root: INFO

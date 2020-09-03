@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lwf.framework.train.mapper.TrainStationMapper" >
+    <resultMap id="BaseResultMap" type="cn.lwf.framework.model.TrainStation" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="telegraph_code" property="telegraphCode" jdbcType="VARCHAR" />
+        <result column="station_name" property="stationName" jdbcType="VARCHAR" />
+        <result column="spell" property="spell" jdbcType="VARCHAR" />
+        <result column="initial" property="initial" jdbcType="VARCHAR" />
+        <result column="pinyin_code" property="pinyinCode" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="findStationList" resultMap="BaseResultMap">
+        select id, telegraph_code, station_name, spell, initial, pinyin_code, create_time, update_time from train_station
+    </select>
+
+    <select id="findStationByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select id, telegraph_code, station_name, spell, initial, pinyin_code, create_time, update_time from train_station where station_name = #{stationName} limit 1;
+    </select>
+
+    <select id="findStationById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select id, telegraph_code, station_name, spell, initial, pinyin_code, create_time, update_time from train_station where id = #{id} limit 1;
+    </select>
+
+    <select id="findTelegraphCodeByName" resultType="java.lang.String" parameterType="java.lang.String">
+        select telegraph_code from train_station where station_name = #{stationName} limit 1;
+    </select>
+
+    <insert id="insert" parameterType="cn.lwf.framework.model.TrainStation">
+    insert train_station (
+      id, telegraph_code, station_name, spell, initial, pinyin_code, create_time, update_time
+    )
+    values (
+      #{id,jdbcType=BIGINT}, #{telegraphCode,jdbcType=VARCHAR}, #{stationName,jdbcType=VARCHAR}, #{spell,jdbcType=VARCHAR}, #{initial,jdbcType=VARCHAR},#{pinyinCode,jdbcType=VARCHAR}, now(), now()
+    )
+    </insert>
+
+    <update id="update" parameterType="cn.lwf.framework.model.TrainStation" >
+        update train_station
+        set
+        <if test="telegraphCode != null and telegraphCode != ''">telegraph_code = #{telegraphCode,jdbcType=VARCHAR},</if>
+        <if test="stationName != null and stationName != ''">station_name = #{stationName,jdbcType=VARCHAR},</if>
+        <if test="spell != null and spell != ''">spell = #{spell,jdbcType=VARCHAR},</if>
+        <if test="initial != null and initial != ''">initial = #{initial,jdbcType=VARCHAR},</if>
+        <if test="pinyinCode != null and pinyinCode != ''">pinyin_code = #{pinyinCode,jdbcType=VARCHAR},</if>
+        update_time = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

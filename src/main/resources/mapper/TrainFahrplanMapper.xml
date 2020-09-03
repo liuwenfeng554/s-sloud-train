@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.lwf.framework.train.mapper.TrainFahrplanMapper" >
+    <resultMap id="BaseResultMap" type="cn.lwf.framework.model.TrainFahrplan" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="train_code" property="trainCode" jdbcType="VARCHAR" />
+        <result column="is_frozen" property="isFrozen" jdbcType="INTEGER" />
+        <result column="frozen_reason" property="frozenReason" jdbcType="VARCHAR" />
+        <result column="length_type" property="lengthType" jdbcType="INTEGER" />
+        <result column="is_direct" property="isDirect" jdbcType="INTEGER" />
+        <result column="split_type" property="splitType" jdbcType="INTEGER" />
+        <result column="train_info_new" property="trainInfoNew" jdbcType="VARCHAR" />
+        <result column="train_info" property="trainInfo" jdbcType="VARCHAR" />
+        <result column="train_company_id" property="trainCompanyId" jdbcType="BIGINT" />
+        <result column="train_small" property="trainSmall" jdbcType="VARCHAR" />
+        <result column="train_no" property="trainNo" jdbcType="VARCHAR" />
+        <result column="train_info_update_time" property="trainInfoUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="findFahrplanList" resultMap="BaseResultMap">
+        select id, train_code, is_frozen, frozen_reason, length_type, is_direct, split_type, train_info_new, train_info, train_company_id, train_small, train_no, train_info_update_time, create_time from train_fahrplan where is_frozen = 0
+    </select>
+
+    <select id="findFahrplanByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select id, train_code, is_frozen, frozen_reason, length_type, is_direct, split_type, train_info_new, train_info, train_company_id, train_small, train_no, train_info_update_time, create_time from train_fahrplan where train_code = #{trainCode} limit 1;
+    </select>
+
+    <insert id="insert" parameterType="cn.lwf.framework.model.TrainFahrplan">
+    insert train_fahrplan (
+      id, train_code, is_frozen, frozen_reason, length_type, is_direct, split_type, train_info_new, train_info, train_company_id, train_small, train_no, train_info_update_time, create_time
+    )
+    values (
+      #{id,jdbcType=BIGINT}, #{trainCode,jdbcType=VARCHAR}, 0, #{frozenReason,jdbcType=VARCHAR}, #{lengthType,jdbcType=INTEGER}, #{isDirect,jdbcType=INTEGER},
+      #{splitType,jdbcType=INTEGER}, #{trainInfoNew,jdbcType=VARCHAR}, #{trainInfo,jdbcType=VARCHAR}, #{trainCompanyId,jdbcType=BIGINT}, #{trainSmall,jdbcType=VARCHAR}, #{trainNo,jdbcType=VARCHAR},
+      #{trainInfoUpdateTime,jdbcType=TIMESTAMP}, now()
+    )
+    </insert>
+
+    <update id="update" parameterType="cn.lwf.framework.model.TrainFahrplan" >
+        update train_fahrplan
+        set
+        <if test="trainCode != null and trainCode != ''">train_code = #{trainCode,jdbcType=VARCHAR},</if>
+        <if test="isFrozen != null">is_frozen = #{isFrozen,jdbcType=INTEGER},</if>
+        <if test="frozenReason != null and frozenReason != ''">frozen_reason = #{frozenReason,jdbcType=VARCHAR},</if>
+        <if test="lengthType != null">length_type = #{lengthType,jdbcType=INTEGER},</if>
+        <if test="isDirect != null">is_direct = #{isDirect,jdbcType=INTEGER},</if>
+        <if test="splitType != null">split_type = #{splitType,jdbcType=INTEGER},</if>
+        <if test="trainInfoNew != null and trainInfoNew != ''">train_info_new = #{trainInfoNew,jdbcType=VARCHAR},</if>
+        <if test="trainInfo != null and trainInfo != ''">train_info = #{trainInfo,jdbcType=VARCHAR},</if>
+        <if test="trainCompanyId != null">train_company_id = #{trainCompanyId,jdbcType=BIGINT},</if>
+        <if test="trainSmall != null and trainSmall != ''">train_small = #{trainSmall,jdbcType=VARCHAR},</if>
+        <if test="trainNo != null and trainNo != ''">train_no = #{trainNo,jdbcType=VARCHAR},</if>
+        train_info_update_time = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
